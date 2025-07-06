@@ -1,0 +1,37 @@
+﻿services:
+  todohub.api:
+    image: todohub.api
+    build:
+      context: .
+      dockerfile: src/TodoHub.API/Dockerfile
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    environment:
+        - ASPNETCORE_ENVIRONMENT=Development
+        - ConnectionStrings__DefaultConnection=Host=todohub-postgres-1;Database=TodoHubDb;Username=postgres;Password=postgres123
+    depends_on:
+      - postgres
+    networks:
+      - todohubapi-network
+  
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres123
+      POSTGRES_DB: TodoHubDb
+    ports:
+      - "5433:5432"
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - todohubapi-network
+        
+volumes:
+  postgres_data:
+
+networks:
+  todohubapi-network:
+    driver: bridge
