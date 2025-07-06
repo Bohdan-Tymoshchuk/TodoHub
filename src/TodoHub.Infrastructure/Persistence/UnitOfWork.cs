@@ -10,11 +10,4 @@ public class UnitOfWork(TodoDbContext context) : IUnitOfWork
     {
         await context.SaveChangesAsync(cancellationToken);
     }
-
-    public async Task<IDbTransaction> BeginTransactionAsync()
-    {
-        var transaction = await context.Database.BeginTransactionAsync();
-
-        return transaction.GetDbTransaction();
-    }
 }

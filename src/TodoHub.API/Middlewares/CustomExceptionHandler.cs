@@ -19,7 +19,7 @@ public class CustomExceptionHandler(ILogger<CustomExceptionHandler> logger) : IE
                 (
                     exception.Message,
                     exception.GetType().Name,
-                    httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError
+                    httpContext.Response.StatusCode = StatusCodes.Status403Forbidden
                 ),
             ValidationException => 
                 (
@@ -52,16 +52,6 @@ public class CustomExceptionHandler(ILogger<CustomExceptionHandler> logger) : IE
                     httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError 
                 )
         };
-        
-        var problemDetails = new ProblemDetails
-        {
-            Title = details.Title,
-            Detail = details.Details,
-            Status = details.StatusCode,
-            Instance = httpContext.Request.Path,
-        };
-        
-        problemDetails.Extensions.Add("traceId", httpContext.TraceIdentifier);
         
         var response = ApiResponse<object>.ErrorResult(details.Title, [details.Details]);
         if (exception is ValidationException validationException)

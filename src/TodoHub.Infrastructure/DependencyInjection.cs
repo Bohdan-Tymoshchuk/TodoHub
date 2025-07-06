@@ -14,7 +14,6 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
-        //services.AddScoped<ISaveChangesInterceptor, UpdateBaseEntitiesInterceptor>();
         services.AddScoped<ISaveChangesInterceptor, UpdateAuditableEntitiesInterceptor>();
 
         services.AddDbContext<TodoDbContext>((sp, options) =>
